@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //services
-builder.Services.AddScoped<AspNetUserService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

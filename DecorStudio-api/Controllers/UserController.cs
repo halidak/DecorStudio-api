@@ -8,9 +8,9 @@ namespace DecorStudio_api.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly AspNetUserService userService;
+        private readonly UserService userService;
 
-        public UserController(AspNetUserService userService)
+        public UserController(UserService userService)
         {
             this.userService = userService;
         }
