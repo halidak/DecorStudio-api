@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StoreService>();
 builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<DecorService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
