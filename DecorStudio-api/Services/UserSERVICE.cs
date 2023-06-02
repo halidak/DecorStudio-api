@@ -8,10 +8,10 @@ using System.Text;
 
 namespace DecorStudio_api.Services
 {
-    public class AspNetUserService
+    public class UserService
     {
         private readonly UserManager<User> userManager;
-        public AspNetUserService(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager)
         {
             this.userManager = userManager;
         }

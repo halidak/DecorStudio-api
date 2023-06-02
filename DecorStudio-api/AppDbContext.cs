@@ -10,5 +10,10 @@ namespace DecorStudio_api
         {
         }
 
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Decor> Decors { get; set; }
+
+
     }
 }
