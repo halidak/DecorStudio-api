@@ -18,6 +18,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //services
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<StoreService>();
+builder.Services.AddScoped<WarehouseService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
