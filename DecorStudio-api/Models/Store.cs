@@ -8,5 +8,6 @@
         public string Address { get; set; }
         public double Size { get; set; }
         public int NumberOfEmployees { get; set; }
+        public List<Catalog> Catalogs { get; set; }
     }
 }
