@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public int StoreId { get; set; }
         public Store Store { get; set; }
+        public List<Catalog_Decor> Catalog_Decors { get; set; }
     }
 }

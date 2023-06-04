@@ -9,5 +9,7 @@ namespace DecorStudio_api.Models
         public string LastName { get; set; }
         public string Role { get; set; }
         public string PhoneNumber { get; set; }
+        public int? StoreId { get; set; }
+        public Store Store { get; set; }
     }
 }

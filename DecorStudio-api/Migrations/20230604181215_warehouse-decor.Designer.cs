@@ -4,6 +4,7 @@ using DecorStudio_api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DecorStudio_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230604181215_warehouse-decor")]
+    partial class warehousedecor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,16 +36,11 @@ namespace DecorStudio_api.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReservationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReservationId");
 
                     b.HasIndex("UserId");
 
@@ -69,29 +67,6 @@ namespace DecorStudio_api.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("Catalogs");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Catalog_Decor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CatalogId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DecorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogId");
-
-                    b.HasIndex("DecorId");
-
-                    b.ToTable("Catalog_Decors");
                 });
 
             modelBuilder.Entity("DecorStudio_api.Models.Decor", b =>
@@ -123,48 +98,6 @@ namespace DecorStudio_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Decors");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Decor_Reservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DecorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DecorId");
-
-                    b.HasIndex("ReservationId");
-
-                    b.ToTable("Decor_Reservations");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Reservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("DecorStudio_api.Models.Store", b =>
@@ -256,9 +189,6 @@ namespace DecorStudio_api.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StoreId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -275,8 +205,6 @@ namespace DecorStudio_api.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -333,7 +261,7 @@ namespace DecorStudio_api.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Warehouse_Decors");
+                    b.ToTable("Warehouse_Decor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -471,17 +399,11 @@ namespace DecorStudio_api.Migrations
 
             modelBuilder.Entity("DecorStudio_api.Models.Appointment", b =>
                 {
-                    b.HasOne("DecorStudio_api.Models.Reservation", "Reservation")
-                        .WithMany("Appointments")
-                        .HasForeignKey("ReservationId");
-
                     b.HasOne("DecorStudio_api.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Reservation");
 
                     b.Navigation("User");
                 });
@@ -497,68 +419,10 @@ namespace DecorStudio_api.Migrations
                     b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("DecorStudio_api.Models.Catalog_Decor", b =>
-                {
-                    b.HasOne("DecorStudio_api.Models.Catalog", "Catalog")
-                        .WithMany("Catalog_Decors")
-                        .HasForeignKey("CatalogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DecorStudio_api.Models.Decor", "Decor")
-                        .WithMany("Catalog_Decors")
-                        .HasForeignKey("DecorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Catalog");
-
-                    b.Navigation("Decor");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Decor_Reservation", b =>
-                {
-                    b.HasOne("DecorStudio_api.Models.Decor", "Decor")
-                        .WithMany("Decor_Reservations")
-                        .HasForeignKey("DecorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DecorStudio_api.Models.Reservation", "Reservation")
-                        .WithMany("Decor_Reservations")
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Decor");
-
-                    b.Navigation("Reservation");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Reservation", b =>
-                {
-                    b.HasOne("DecorStudio_api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.User", b =>
-                {
-                    b.HasOne("DecorStudio_api.Models.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId");
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("DecorStudio_api.Models.Warehouse", b =>
                 {
                     b.HasOne("DecorStudio_api.Models.Store", "Store")
-                        .WithMany("Warehouses")
+                        .WithMany()
                         .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -636,32 +500,14 @@ namespace DecorStudio_api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DecorStudio_api.Models.Catalog", b =>
-                {
-                    b.Navigation("Catalog_Decors");
-                });
-
             modelBuilder.Entity("DecorStudio_api.Models.Decor", b =>
                 {
-                    b.Navigation("Catalog_Decors");
-
-                    b.Navigation("Decor_Reservations");
-
                     b.Navigation("Warehouse_Decors");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Reservation", b =>
-                {
-                    b.Navigation("Appointments");
-
-                    b.Navigation("Decor_Reservations");
                 });
 
             modelBuilder.Entity("DecorStudio_api.Models.Store", b =>
                 {
                     b.Navigation("Catalogs");
-
-                    b.Navigation("Warehouses");
                 });
 
             modelBuilder.Entity("DecorStudio_api.Models.Warehouse", b =>

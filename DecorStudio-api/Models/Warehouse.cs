@@ -8,5 +8,6 @@
         public double Size { get; set; }
         public int StoreId { get; set; }
         public Store Store { get; set; }
+        public List<Warehouse_Decor> Warehouse_Decors { get; set; }
     }
 }
