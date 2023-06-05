@@ -7,5 +7,6 @@
         public string Description { get; set; }
         public string Type { get; set; }
         public byte[]? Image { get; set; }
+        public int Amount { get; set; }
     }
 }

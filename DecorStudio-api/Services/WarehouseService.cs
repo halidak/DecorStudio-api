@@ -13,15 +13,29 @@ namespace DecorStudio_api.Services
             this.context = context;
         }
 
-        public async Task<List<Warehouse>> GetAllWarehouses()
+        public async Task<List<Warehouse>> GetAllWarehouses(int storeId)
         {
-            var list = await context.Warehouses.ToListAsync();
+            var list = await context.Warehouses
+                 .Where(c => c.StoreId == storeId)
+                 .Include(c => c.Warehouse_Decors) // Include Warehouse_Decors
+                 .ToListAsync();
             return list;
         }
 
-        public async Task<Warehouse> GetWarehouseById(int id)
+        public async Task<List<Warehouse_Decor>> GetAllDecorsFromWarehouse(int warehouseId)
         {
-            var warehouse = await context.Warehouses.FirstOrDefaultAsync(s => s.Id == id);
+            var list = await context.Warehouse_Decors
+                .Where(c => c.WarehouseId == warehouseId)
+                .Include(c => c.Decor)
+                .ToListAsync();
+
+            return list;
+        }
+
+
+        public async Task<Warehouse> GetWarehouseById(int storeId, int id)
+        {
+            var warehouse = await context.Warehouses.Include(c => c.Store).Include(w => w.Warehouse_Decors).FirstOrDefaultAsync(s => s.Id == id && s.StoreId == storeId);
             if (warehouse == null)
             {
                 throw new Exception("Warehouse doesn't exist");

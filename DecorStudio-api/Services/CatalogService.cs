@@ -30,6 +30,7 @@ namespace DecorStudio_api.Services
             return catalog;
         }
 
+        //svi katalozi za odredjenu prodavnicu
         public async Task<List<Catalog>> GetCatalogs(int storeId)
         {
             return await context.Catalogs.Where(c => c.StoreId == storeId).Include(c => c.Store).Include(c => c.Catalog_Decors).ToListAsync();
@@ -111,5 +112,8 @@ namespace DecorStudio_api.Services
         {
             return await context.Catalog_Decors.Where(cd => cd.CatalogId == catalogId).Include(cd => cd.Catalog).Include(cd => cd.Decor).ToListAsync();
         }
+
+       
+
     }
 }

@@ -27,13 +27,57 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPost("add-decor")]
-        public async Task<IActionResult> Add([FromBody] DecorDto decor)
+        //sav dekor iz magacina
+        [HttpGet("decore-warehouse/{warehouseId}")]
+        public async Task<IActionResult> GetByWarehouseId(int warehouseId)
         {
             try
             {
-                await decorService.AddDecor(decor);
+                var list = await decorService.GetAllDecorsFromWarehouse(warehouseId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //sav dekor iz kataloga
+        [HttpGet("decore-catalog/{catalogId}")]
+        public async Task<IActionResult> GetByCatalogId(int catalogId)
+        {
+            try
+            {
+                var list = await decorService.GetAllDecorsFromCatalog(catalogId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //dekor iz magacina odrednjene radnje
+        [HttpGet("decore-warehouse-store/{storeId}")]
+        public async Task<IActionResult> Get(int storeId)
+        {
+            try
+            {
+                var list = await decorService.GetAllDecorsFromWarehouseFromStore(storeId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("add-decor/{warehouseId}")]
+        public async Task<IActionResult> Add(int warehouseId, [FromBody] DecorDto decor)
+        {
+            try
+            {
+                await decorService.AddDecor(warehouseId ,decor);
                 return Ok();
             }
             catch (Exception ex)

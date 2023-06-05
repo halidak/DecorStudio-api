@@ -14,12 +14,13 @@ namespace DecorStudio_api.Controllers
             this.warehouseService = warehouseService;
         }
 
-        [HttpGet("all-warehouses")]
-        public async Task<IActionResult> GetAll()
+        //svi magacini neke radnje
+        [HttpGet("all-warehouses/{storeId}")]
+        public async Task<IActionResult> GetAll(int storeId)
         {
             try
             {
-                var list = await warehouseService.GetAllWarehouses();
+                var list = await warehouseService.GetAllWarehouses(storeId);
                 return Ok(list);
             }
             catch (Exception ex)
@@ -42,12 +43,12 @@ namespace DecorStudio_api.Controllers
             }
         }
 
-        [HttpGet("get-warehouse-by-id/{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("get-warehouse-by-id/{storeId}/{id}")]
+        public async Task<IActionResult> GetById(int storeId, int id)
         {
             try
             {
-                var warehouse = await warehouseService.GetWarehouseById(id);
+                var warehouse = await warehouseService.GetWarehouseById(storeId, id);
                 return Ok(warehouse);
             }
             catch (Exception ex)
@@ -77,6 +78,20 @@ namespace DecorStudio_api.Controllers
             {
                 await warehouseService.DeleteWarehouse(id);
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("decor-warehouse/{warehouseId}")]
+        public async Task<IActionResult> GetAllDecorsFromWarehouse(int warehouseId)
+        {
+            try
+            {
+                var list = await warehouseService.GetAllDecorsFromWarehouse(warehouseId);
+                return Ok(list);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using DecorStudio_api.DTOs;
+using DecorStudio_api.Migrations;
 using DecorStudio_api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,8 +29,15 @@ namespace DecorStudio_api.Services
             return decor;
         }
 
-        public async Task AddDecor(DecorDto decor)
+
+        public async Task AddDecor(int warehouseId, DecorDto decor)
         {
+            var warehouse = await context.Warehouses.FirstOrDefaultAsync(s => s.Id == warehouseId);
+            if (warehouse == null)
+            {
+                throw new Exception("Warehouse doesn't exist");
+            }
+           
             var d = new Decor
             {
                 Name = decor.Name,
@@ -39,6 +47,15 @@ namespace DecorStudio_api.Services
                 Image = decor.Image
             };
             context.Decors.Add(d);
+            await context.SaveChangesAsync();
+
+            var w = new Warehouse_Decor
+            {
+                WarehouseId = warehouseId,
+                DecorId = d.Id,
+                Amount = decor.Amount
+            };
+            context.Warehouse_Decors.Add(w);
             await context.SaveChangesAsync();
         }
 
@@ -67,5 +84,42 @@ namespace DecorStudio_api.Services
             d.Image = decor.Image;
             await context.SaveChangesAsync();
         }
+
+        //svi dekori iz magacina
+        public async Task<List<Decor>> GetAllDecorsFromWarehouse(int warehouseId)
+        {
+            var list = await context.Warehouse_Decors
+                .Where(c => c.WarehouseId == warehouseId)
+                .Include(c => c.Decor)
+                .Select(c => c.Decor)
+                .ToListAsync();
+
+            return list;
+        }
+
+        //svi dekori iz kataloga
+        public async Task<List<Decor>> GetAllDecorsFromCatalog(int catalogId)
+        {
+            var list = await context.Catalog_Decors
+                .Where(c => c.CatalogId == catalogId)
+                .Include(c => c.Decor)
+                .Select(c => c.Decor)
+                .ToListAsync();
+            return list;
+        }
+
+        //svi dekori iz magacina iz neke radnje
+        public async Task<List<Decor>> GetAllDecorsFromWarehouseFromStore(int storeId)
+        {
+            var list = await context.Warehouses
+                .Where(c => c.StoreId == storeId)
+                .Include(c => c.Warehouse_Decors)
+                .SelectMany(c => c.Warehouse_Decors)
+                .Include(c => c.Decor)
+                .Select(c => c.Decor)
+                .ToListAsync();
+            return list;
+        }
+
     }
 }
