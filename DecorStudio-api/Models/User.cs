@@ -11,5 +11,7 @@ namespace DecorStudio_api.Models
         public string PhoneNumber { get; set; }
         public int? StoreId { get; set; }
         public Store Store { get; set; }
+        public List<Appointment> Appointments { get; set; }
+        public List<Reservation> Reservations { get; set; }
     }
 }
