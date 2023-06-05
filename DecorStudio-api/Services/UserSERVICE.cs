@@ -45,25 +45,24 @@ namespace DecorStudio_api.Services
             {
                 throw new Exception("User do not exists");
             }
-
+            
             if (await userManager.CheckPasswordAsync(u, user.Password))
             {
                 var signKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("78fUjkyzfLz56gTq"));
                 var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                //new Claim(JwtRegisteredClaimNames.Jti, new Guid().ToString())
-            };
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                };
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddHours(1),
+                    expires: DateTime.Now.AddHours(2),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(signKey, SecurityAlgorithms.HmacSha256)
                     );
                 var toReturn = new JwtSecurityTokenHandler().WriteToken(token);
                 var obj = new
                 {
-                    expires = DateTime.Now.AddHours(1),
+                    expires = DateTime.Now.AddHours(2),
                     token = toReturn,
                     user = u
                 };
