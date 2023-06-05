@@ -30,6 +30,12 @@ namespace DecorStudio_api.Services
             return await context.Appointments.ToListAsync();
         }
 
+        //svi slobodni termini osoblja iz odredjene prodavnice
+        public async Task<List<Appointment>> GetAppointmentsByStore(int storeId)
+        {
+            return await context.Appointments.Where(a => a.User.StoreId == storeId && a.ReservationId == null).ToListAsync();
+        }
+
         public async Task<Appointment> GetAppointment(int id)
         {
             return await context.Appointments.FirstOrDefaultAsync(a => a.Id == id);

@@ -29,6 +29,20 @@ namespace DecorStudio_api.Controllers
             }
         }
 
+        [HttpGet("all-app-from-store/{storeId}")]
+        public async Task<IActionResult> GetAll(int storeId)
+        {
+            try
+            {
+                var list = await service.GetAppointmentsByStore(storeId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("get-by-user/{id}")]
         public async Task<IActionResult> GetUserApp(string id)
         {
