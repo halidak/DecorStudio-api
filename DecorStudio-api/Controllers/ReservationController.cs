@@ -42,5 +42,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("cancel-reservation/{id}")]
+        public async Task<IActionResult> CancelReservation(int id)
+        {
+            try
+            {
+                await reservationService.CancelReservation(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

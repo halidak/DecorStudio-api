@@ -89,6 +89,30 @@ namespace DecorStudio_api.Services
 
         }
 
+        //cancel reservation
+        public async Task CancelReservation(int id)
+        {
+            var reservation = await context.Reservations.FirstOrDefaultAsync(r => r.Id == id);
+            if (reservation == null)
+            {
+                throw new Exception("Reservation doesn't exist");
+            }
+            var decorReservations = await context.Decor_Reservations.Where(dr => dr.ReservationId == id).ToListAsync();
+            foreach (var dr in decorReservations)
+            {
+                context.Decor_Reservations.Remove(dr);
+            }
+            await context.SaveChangesAsync();
+            var appointments = await context.Appointments.Where(a => a.ReservationId == id).ToListAsync();
+            foreach (var a in appointments)
+            {
+                a.ReservationId = null;
+            }
+            await context.SaveChangesAsync();
+            context.Reservations.Remove(reservation);
+            await context.SaveChangesAsync();
+        }
+
         //sve reservacije jednog usera
         public async Task<List<Reservation>> GetReservations(string userId)
         {
