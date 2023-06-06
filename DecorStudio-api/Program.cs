@@ -23,6 +23,7 @@ builder.Services.AddScoped<WarehouseService>();
 builder.Services.AddScoped<DecorService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<CatalogService>();
+builder.Services.AddScoped<ReservationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

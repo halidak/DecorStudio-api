@@ -13,15 +13,15 @@ namespace DecorStudio_api
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.User)
+                .WithMany(r => r.Reservations)
+                .HasForeignKey(r => r.UserId);
+
             modelBuilder.Entity<Appointment>()
                .HasOne(p => p.User)
                .WithMany(p => p.Appointments)
                .HasForeignKey(p => p.UserId);
-
-            modelBuilder.Entity<Reservation>()
-                .HasOne(p => p.User)
-                .WithMany(p => p.Reservations)
-                .HasForeignKey(p => p.UserId);
 
             modelBuilder.Entity<Warehouse_Decor>()
                 .HasOne(w => w.Warehouse)
@@ -43,10 +43,6 @@ namespace DecorStudio_api
                 .WithMany(d => d.Catalog_Decors)
                 .HasForeignKey(d => d.DecorId);
 
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.User)
-                .WithMany()
-                .HasForeignKey(r => r.UserId);
 
             modelBuilder.Entity<Decor_Reservation>()
                 .HasOne(r => r.Decor)
