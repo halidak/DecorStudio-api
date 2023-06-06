@@ -28,5 +28,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("user-reservation/{userId}")]
+        public async Task<IActionResult> GetUserReservation(string userId)
+        {
+            try
+            {
+                var reservation = await reservationService.GetReservations(userId);
+                return Ok(reservation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

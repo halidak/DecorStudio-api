@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DecorStudio_api.Services;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,11 @@ builder.Services.AddScoped<DecorService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<CatalogService>();
 builder.Services.AddScoped<ReservationService>();
+
+//builder.Services.AddControllers().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

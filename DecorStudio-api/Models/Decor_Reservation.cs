@@ -1,4 +1,6 @@
-﻿namespace DecorStudio_api.Models
+﻿using System.Text.Json.Serialization;
+
+namespace DecorStudio_api.Models
 {
     public class Decor_Reservation
     {

@@ -2,6 +2,7 @@
 using DecorStudio_api.Migrations;
 using DecorStudio_api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DecorStudio_api.Services
 {
@@ -119,6 +120,31 @@ namespace DecorStudio_api.Services
                 .Select(c => c.Decor)
                 .ToListAsync();
             return list;
+        }
+
+        //dekor rezervisan od strane korisnika
+        public async Task<List<Decor>> GetAllDecorsFromReservation(string userId)
+        {
+            var list = await context.Decors.Where(d => d.Decor_Reservations.Any(dr => dr.Reservation.UserId == userId)).ToListAsync();
+
+
+            return list;
+        }
+
+        //dekori na kojima radi osoblje
+        public async Task<List<Decor>> GetAllDecorsFromEmployee(string userId)
+        {
+            var decorIds = await context.Appointments
+                 .Where(a => a.UserId == userId && a.ReservationId != null)
+                 .SelectMany(a => a.Reservation.Decor_Reservations.Select(dr => dr.DecorId))
+                 .ToListAsync();
+
+            var decorations = await context.Decors
+                .Where(d => decorIds.Contains(d.Id))
+                .ToListAsync();
+
+            return decorations;
+
         }
 
     }

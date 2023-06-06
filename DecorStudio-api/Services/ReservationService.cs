@@ -88,5 +88,16 @@ namespace DecorStudio_api.Services
             }
 
         }
+
+        //sve reservacije jednog usera
+        public async Task<List<Reservation>> GetReservations(string userId)
+        {
+            var reservations = await context.Reservations
+                .Where(r => r.UserId == userId)
+                .Include(r => r.Decor_Reservations)
+                .ThenInclude(dr => dr.Decor)
+                .ToListAsync();
+            return reservations;
+        }
     }
 }

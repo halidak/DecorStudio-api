@@ -127,5 +127,35 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //rezervisani dekor od strane jednog korisnika
+        [HttpGet("user-reservation/{userId}")]
+        public async Task<IActionResult> GetUserReservation(string userId)
+        {
+            try
+            {
+                var reservation = await decorService.GetAllDecorsFromReservation(userId);
+                return Ok(reservation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //dekor na kojem korisnik radi
+        [HttpGet("user-working/{userId}")]
+        public async Task<IActionResult> GetUserWorking(string userId)
+        {
+            try
+            {
+                var working = await decorService.GetAllDecorsFromEmployee(userId);
+                return Ok(working);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
