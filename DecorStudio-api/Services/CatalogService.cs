@@ -41,6 +41,12 @@ namespace DecorStudio_api.Services
             return await context.Catalogs.Include(c => c.Store).Include(c => c.Catalog_Decors).FirstOrDefaultAsync(c => c.Id == catalogId && c.StoreId == storeId);
         }
 
+        //get catalog by id
+        public async Task<Catalog> GetCatalog(int id)
+        {
+            return await context.Catalogs.Include(c => c.Store).Include(c => c.Catalog_Decors).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<Catalog> UpdateCatalog(int id, CatalogDto catalogDto)
         {
             var store = await context.Stores.FirstOrDefaultAsync(s => s.Id == catalogDto.StoreId);

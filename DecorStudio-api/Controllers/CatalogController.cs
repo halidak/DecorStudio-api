@@ -43,6 +43,21 @@ namespace DecorStudio_api.Controllers
             }
         }
 
+        //get catalog by id
+        [HttpGet("get-catalog-by-id/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var app = await service.GetCatalog(id);
+                return Ok(app);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("add-catalog")]
         public async Task<IActionResult> AddCatalog([FromBody] CatalogDto dto)
         {
