@@ -11,13 +11,11 @@ namespace DecorStudio_api.DTOs
         [Required]
         public string LastName { get; set; }
         [Required]
-        public string Role { get; set; }
+        public int RoleId { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
         public string Password { get; set; }
-        [Required]
-        [Compare("Password")]
-        public string Confirm { get; set; }
+        public int? StoreId { get; set; }
     }
 }

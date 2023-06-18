@@ -4,6 +4,7 @@ using DecorStudio_api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DecorStudio_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230617130608_roles2")]
+    partial class roles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,8 +272,9 @@ namespace DecorStudio_api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -294,8 +298,6 @@ namespace DecorStudio_api.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("RoleId");
 
                     b.HasIndex("StoreId");
 
@@ -569,15 +571,9 @@ namespace DecorStudio_api.Migrations
 
             modelBuilder.Entity("DecorStudio_api.Models.User", b =>
                 {
-                    b.HasOne("DecorStudio_api.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId");
-
                     b.HasOne("DecorStudio_api.Models.Store", "Store")
                         .WithMany()
                         .HasForeignKey("StoreId");
-
-                    b.Navigation("Role");
 
                     b.Navigation("Store");
                 });
@@ -682,11 +678,6 @@ namespace DecorStudio_api.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("Decor_Reservations");
-                });
-
-            modelBuilder.Entity("DecorStudio_api.Models.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DecorStudio_api.Models.Store", b =>

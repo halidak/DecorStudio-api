@@ -54,6 +54,11 @@ namespace DecorStudio_api
                 .WithMany(r => r.Decor_Reservations)
                 .HasForeignKey(r => r.ReservationId);
 
+            //modelBuilder.Entity<User>()
+            //    .HasOne(u => u.Role)
+            //    .WithMany(u => u.Users)
+            //    .HasForeignKey(u => u.RoleId);
+
         }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
@@ -64,5 +69,6 @@ namespace DecorStudio_api
         public DbSet<Catalog_Decor> Catalog_Decors { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Decor_Reservation> Decor_Reservations { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

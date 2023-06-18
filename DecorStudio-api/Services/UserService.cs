@@ -18,16 +18,22 @@ namespace DecorStudio_api.Services
 
         public async Task<bool> Register(UserRegisterDto user)
         {
-            User u = new User
+            var u = await userManager.FindByNameAsync(user.UserName);
+            if (u != null)
+            {
+                throw new Exception("User already exists");
+            }
+            User us = new User
             {
                 UserName = user.UserName,
                 Email = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Role = user.Role,
+                RoleId = user.RoleId,
                 PhoneNumber = user.PhoneNumber,
+                StoreId = user.StoreId
             };
-            var result = await userManager.CreateAsync(u, user.Password);
+            var result = await userManager.CreateAsync(us, user.Password);
             if (result.Succeeded)
             {
                 return true;
