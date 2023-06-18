@@ -1,6 +1,7 @@
 ﻿using DecorStudio_api.DTOs;
 using DecorStudio_api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -79,5 +80,23 @@ namespace DecorStudio_api.Services
                 throw new Exception("Username and password not match");
             }
         }
+        //proveri da li je username zauzet
+        public async Task<bool> CheckUsername(string username)
+        {
+            var u = await userManager.FindByNameAsync(username);
+            if (u == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public async Task<User> GetUser(string email)
+        {
+            return await userManager.FindByEmailAsync(email);
+        }
+
     }
 }

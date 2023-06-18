@@ -42,5 +42,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("get-user-by-email")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var res = await userService.CheckUsername(email);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
