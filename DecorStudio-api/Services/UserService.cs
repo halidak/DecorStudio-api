@@ -52,7 +52,7 @@ namespace DecorStudio_api.Services
             {
                 throw new Exception("User do not exists");
             }
-            
+
             if (await userManager.CheckPasswordAsync(u, user.Password))
             {
                 var signKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("78fUjkyzfLz56gTq"));
@@ -93,9 +93,43 @@ namespace DecorStudio_api.Services
                 return true;
             }
         }
-        public async Task<User> GetUser(string email)
+        //public async Task<User> GetUser(string email)
+        //{
+        //    return await userManager.FindByEmailAsync(email);
+        //}
+
+        //update user
+        public async Task<User> UpdateUser(string userId, UserUpdateDto user)
         {
-            return await userManager.FindByEmailAsync(email);
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            u.FirstName = user.FirstName;
+            u.LastName = user.LastName;
+            u.PhoneNumber = user.PhoneNumber;
+            u.Image = user.Image;
+            var result = await userManager.UpdateAsync(u);
+            if (result.Succeeded)
+            {
+                return u;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
+        //get user by id
+        public async Task<User> GetUser(string userId)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            return u;
         }
 
     }

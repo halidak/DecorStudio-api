@@ -56,5 +56,20 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //update user   
+        [HttpPut("update-user/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateDto user)
+        {
+            try
+            {
+                var res = await userService.UpdateUser(id, user);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
