@@ -48,7 +48,7 @@ namespace DecorStudio_api.Controllers
         {
             try
             {
-                var warehouse = await warehouseService.GetWarehouseById(storeId, id);
+                var warehouse = await warehouseService.GetWarehouseByStoreId(storeId, id);
                 return Ok(warehouse);
             }
             catch (Exception ex)
@@ -92,6 +92,20 @@ namespace DecorStudio_api.Controllers
             {
                 var list = await warehouseService.GetAllDecorsFromWarehouse(warehouseId);
                 return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("warehouse/{id}")]
+        public async Task<IActionResult> GetWarehouseById(int id)
+        {
+            try
+            {
+                var warehouse = await warehouseService.GetWarehouseById(id);
+                return Ok(warehouse);
             }
             catch (Exception ex)
             {

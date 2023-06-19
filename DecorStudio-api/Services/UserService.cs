@@ -132,5 +132,24 @@ namespace DecorStudio_api.Services
             return u;
         }
 
+        //delete user
+        public async Task<bool> DeleteUser(string userId)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result = await userManager.DeleteAsync(u);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
     }
 }

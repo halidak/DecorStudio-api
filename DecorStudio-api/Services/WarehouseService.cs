@@ -33,7 +33,7 @@ namespace DecorStudio_api.Services
         }
 
 
-        public async Task<Warehouse> GetWarehouseById(int storeId, int id)
+        public async Task<Warehouse> GetWarehouseByStoreId(int storeId, int id)
         {
             var warehouse = await context.Warehouses.Include(c => c.Store).Include(w => w.Warehouse_Decors).FirstOrDefaultAsync(s => s.Id == id && s.StoreId == storeId);
             if (warehouse == null)
@@ -90,5 +90,17 @@ namespace DecorStudio_api.Services
             w.StoreId = warehouse.StoreId;
             await context.SaveChangesAsync();
         }
+
+        //get warehouse by id
+        public async Task<Warehouse> GetWarehouseById(int id)
+        {
+            var warehouse = await context.Warehouses.Include(c => c.Store).FirstOrDefaultAsync(s => s.Id == id);
+            if (warehouse == null)
+            {
+                throw new Exception("Warehouse doesn't exist");
+            }
+            return warehouse;
+        }
     }
+
 }
