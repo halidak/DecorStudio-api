@@ -7,7 +7,6 @@ namespace DecorStudio_api.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int StoreId { get; set; }
-        [JsonIgnore]
         public Store Store { get; set; }
         public List<Catalog_Decor> Catalog_Decors { get; set; }
     }

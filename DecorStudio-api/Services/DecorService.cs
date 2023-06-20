@@ -22,7 +22,7 @@ namespace DecorStudio_api.Services
 
         public async Task<Decor> GetDecorById(int id)
         {
-            var decor = await context.Decors.FirstOrDefaultAsync(s => s.Id == id);
+            var decor = await context.Decors.Include(d => d.Warehouse_Decors).FirstOrDefaultAsync(s => s.Id == id);
             if (decor == null)
             {
                 throw new Exception("Decor doesn't exist");
@@ -97,6 +97,34 @@ namespace DecorStudio_api.Services
 
             return list;
         }
+
+        //svi dekori iz liste magacina jedne radnje koji se ne nalaze u katalogu
+        public async Task<List<Decor>> GetAllDecorsFromWarehouseNotInCatalog(int storeId, int catalogId)
+        {
+            var warehouseIds = await context.Warehouses
+                .Where(c => c.StoreId == storeId)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            var decorsFromWarehouses = await context.Warehouse_Decors
+                .Where(c => warehouseIds.Contains(c.WarehouseId))
+                .Include(c => c.Decor)
+                .Select(c => c.Decor)
+                .ToListAsync();
+
+            var decorsInCatalog = await context.Catalog_Decors
+                .Where(c => c.CatalogId == catalogId)
+                .Include(c => c.Decor)
+                .Select(c => c.Decor)
+                .ToListAsync();
+
+            var decorsNotInCatalog = decorsFromWarehouses.Except(decorsInCatalog).ToList();
+
+            return decorsNotInCatalog;
+        }
+
+
+
 
         //svi dekori iz kataloga
         public async Task<List<Decor>> GetAllDecorsFromCatalog(int catalogId)

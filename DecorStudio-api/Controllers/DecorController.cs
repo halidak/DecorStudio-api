@@ -157,5 +157,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("decores-from-warehouses/{storeId}/{catalogId}")]
+        public async Task<IActionResult> GetDecoresFromWarehouses(int storeId, int catalogId)
+        {
+            try
+            {
+                var list = await decorService.GetAllDecorsFromWarehouseNotInCatalog(storeId, catalogId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

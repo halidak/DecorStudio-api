@@ -101,5 +101,20 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //change password
+        [HttpPut("change-password/{id}")]
+        public async Task<IActionResult> ChangePassword(string id, [FromBody] UserChangePasswordDto user)
+        {
+            try
+            {
+                var res = await userService.ChangePassword(id, user);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -151,5 +151,24 @@ namespace DecorStudio_api.Services
             }
         }
 
+        //change password
+        public async Task<bool> ChangePassword(string userId, UserChangePasswordDto user)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result = await userManager.ChangePasswordAsync(u, user.OldPassword, user.NewPassword);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
     }
 }
