@@ -27,13 +27,25 @@ namespace DecorStudio_api.Services
 
         public async Task<List<Appointment>> GetAppointments()
         {
-            return await context.Appointments.ToListAsync();
+            return await context.Appointments.Include(a => a.User).ToListAsync();
         }
 
         //svi slobodni termini osoblja iz odredjene prodavnice
         public async Task<List<Appointment>> GetAppointmentsByStore(int storeId)
         {
             return await context.Appointments.Where(a => a.User.StoreId == storeId && a.ReservationId == null).ToListAsync();
+        }
+
+        //svi slobodni termini osoblja koji su veci od danasnjeg datuma
+        public async Task<List<Appointment>> GetAppointmentsByStoreAndDate()
+        {
+            return await context.Appointments
+             .Where(a => a.ReservationId == null && a.DateTime.Date >= DateTime.Now.Date)
+             .GroupBy(a => new { a.DateTime.Year, a.DateTime.Month, a.DateTime.Day }) // Grupisanje po danu, godini i mesecu
+             .Select(g => g.First()) // Izbor prvog elementa iz svake grupe
+             .ToListAsync();
+
+
         }
 
         public async Task<Appointment> GetAppointment(int id)
@@ -68,7 +80,7 @@ namespace DecorStudio_api.Services
 
         public async Task<List<Appointment>> GetAppointmentsByUserId(string userId)
         {
-            return await context.Appointments.Where(a => a.UserId == userId).ToListAsync();
+            return await context.Appointments.Include(a => a.User).Where(a => a.UserId == userId && a.ReservationId == null).ToListAsync();
         }
     }
 }

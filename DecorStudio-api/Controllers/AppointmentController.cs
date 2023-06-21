@@ -98,5 +98,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("get-all-distinct")]
+        public async Task<IActionResult> GetAppointmentsByStoreAndDate()
+        {
+            try
+            {
+                var list = await service.GetAppointmentsByStoreAndDate();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

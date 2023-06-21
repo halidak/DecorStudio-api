@@ -19,11 +19,13 @@ namespace DecorStudio_api.Services
 
         public async Task<Reservation> MakeReservation(ReservationDto dto)
         {
-            var app = await context.Appointments.FirstOrDefaultAsync(a => a.DateTime == dto.ReservationDate);
-            var count = await context.Appointments.CountAsync(a => a.DateTime == dto.ReservationDate);
+            var appointment = await context.Appointments.FirstOrDefaultAsync(a => a.Id == dto.ReservationDate);
+            var app = await context.Appointments.FirstOrDefaultAsync(a => a.Id == dto.ReservationDate);
+            var count = await context.Appointments.CountAsync(a => a.DateTime.Date == appointment.DateTime.Date);
             var appointments = await context.Appointments
-             .Where(a => a.DateTime == dto.ReservationDate && a.ReservationId == null)
-             .ToListAsync();
+                .Where(a => a.Id == dto.ReservationDate && a.ReservationId == null)
+                .ToListAsync();
+
 
             var numOfReservations = dto.DecorIds.Count();
 
@@ -48,12 +50,11 @@ namespace DecorStudio_api.Services
                 }
 
                 app.ReservationId = reservation.Id;
-                
+
                 await context.SaveChangesAsync();
                 return reservation;
             }
-
-            else if (numOfReservations >= 3 && appointments != null && appointments.Count() > 1)
+            else if (numOfReservations >= 3 && count != null && count > 1)
             {
                 var reservation = new Reservation
                 {
@@ -73,21 +74,26 @@ namespace DecorStudio_api.Services
                     await context.Decor_Reservations.AddAsync(decorReservation);
                 }
 
-                var prvaDvaTermina = appointments.Take(2).ToList();
-                foreach (var a in prvaDvaTermina)
+                var matchingAppointments = await context.Appointments
+                    .Where(a => a.DateTime.Date == appointment.DateTime.Date && a.ReservationId == null)
+                    .ToListAsync();
+
+                foreach (var matchingAppointment in matchingAppointments)
                 {
-                    a.ReservationId = reservation.Id;
+                    matchingAppointment.ReservationId = reservation.Id;
                 }
 
                 await context.SaveChangesAsync();
                 return reservation;
             }
+
             else
             {
-                throw new Exception("You can't make reservation");
+                throw new Exception("You can't make a reservation");
             }
 
         }
+
 
         //cancel reservation
         public async Task CancelReservation(int id)

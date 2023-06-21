@@ -1,6 +1,7 @@
 ﻿using DecorStudio_api.DTOs;
 using DecorStudio_api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,16 +19,22 @@ namespace DecorStudio_api.Services
 
         public async Task<bool> Register(UserRegisterDto user)
         {
-            User u = new User
+            var u = await userManager.FindByNameAsync(user.UserName);
+            if (u != null)
+            {
+                throw new Exception("User already exists");
+            }
+            User us = new User
             {
                 UserName = user.UserName,
                 Email = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Role = user.Role,
+                RoleId = user.RoleId,
                 PhoneNumber = user.PhoneNumber,
+                StoreId = user.StoreId
             };
-            var result = await userManager.CreateAsync(u, user.Password);
+            var result = await userManager.CreateAsync(us, user.Password);
             if (result.Succeeded)
             {
                 return true;
@@ -45,7 +52,7 @@ namespace DecorStudio_api.Services
             {
                 throw new Exception("User do not exists");
             }
-            
+
             if (await userManager.CheckPasswordAsync(u, user.Password))
             {
                 var signKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("78fUjkyzfLz56gTq"));
@@ -73,5 +80,95 @@ namespace DecorStudio_api.Services
                 throw new Exception("Username and password not match");
             }
         }
+        //proveri da li je username zauzet
+        public async Task<bool> CheckUsername(string username)
+        {
+            var u = await userManager.FindByNameAsync(username);
+            if (u == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        //public async Task<User> GetUser(string email)
+        //{
+        //    return await userManager.FindByEmailAsync(email);
+        //}
+
+        //update user
+        public async Task<User> UpdateUser(string userId, UserUpdateDto user)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            u.FirstName = user.FirstName;
+            u.LastName = user.LastName;
+            u.PhoneNumber = user.PhoneNumber;
+            u.Image = user.Image;
+            var result = await userManager.UpdateAsync(u);
+            if (result.Succeeded)
+            {
+                return u;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
+        //get user by id
+        public async Task<User> GetUser(string userId)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            return u;
+        }
+
+        //delete user
+        public async Task<bool> DeleteUser(string userId)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result = await userManager.DeleteAsync(u);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
+        //change password
+        public async Task<bool> ChangePassword(string userId, UserChangePasswordDto user)
+        {
+            var u = await userManager.FindByIdAsync(userId);
+            if (u == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result = await userManager.ChangePasswordAsync(u, user.OldPassword, user.NewPassword);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+
     }
 }
