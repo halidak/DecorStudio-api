@@ -15,5 +15,6 @@ namespace DecorStudio_api.Models
         public Store Store { get; set; }
         public List<Appointment>? Appointments { get; set; }
         public List<Reservation>? Reservations { get; set; }
+        public bool IsEmailConfirmed { get; set; } = false;
     }
 }

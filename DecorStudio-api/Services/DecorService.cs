@@ -150,14 +150,51 @@ namespace DecorStudio_api.Services
             return list;
         }
 
-        //dekor rezervisan od strane korisnika
+        //dekor rezervisan od strane korisnika i njihovi termini
+        //public async Task<List<Decor>> GetAllDecorsFromReservationWithAppointments(string userId)
+        //{
+        //    var list = await context.Decors
+        //        .Where(d => d.Decor_Reservations.Any(dr => dr.Reservation.UserId == userId))
+        //        .Include(d => d.Decor_Reservations)
+        //        .SelectMany(d => d.Decor_Reservations)
+        //        .Include(dr => dr.Reservation)
+        //        .SelectMany(dr => dr.Reservation.Appointments)
+        //        .ToListAsync();
+        //    return list;
+        //}
+
+
         public async Task<List<Decor>> GetAllDecorsFromReservation(string userId)
         {
             var list = await context.Decors.Where(d => d.Decor_Reservations.Any(dr => dr.Reservation.UserId == userId)).ToListAsync();
 
 
             return list;
+
         }
+
+
+        //dekori rezervisani iz jedne prodavnice
+        //public async Task<List<Decor>> GetReservedDecorsFromStore(int storeId)
+        //{
+
+        //}
+
+        // sve rezervcije jedne prodavnice
+        public async Task<List<Catalog_Decor>> GetAllReservationsFromStore(int storeId)
+        {
+            var catalogDecors = await context.Catalog_Decors
+         .Where(cd => cd.Catalog.StoreId == storeId)
+         .Include(cd => cd.Decor)
+             .ThenInclude(d => d.Decor_Reservations)
+                 .ThenInclude(dr => dr.Reservation)
+                     .ThenInclude(r => r.Appointments)
+         .ToListAsync();
+
+            return catalogDecors;
+        }
+
+
 
         //dekori na kojima radi osoblje
         public async Task<List<Decor>> GetAllDecorsFromEmployee(string userId)

@@ -171,5 +171,19 @@ namespace DecorStudio_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("decores-res/{storeId}")]
+        public async Task<IActionResult> GetDecoresFromReservation(int storeId)
+        {
+            try
+            {
+                var list = await decorService.GetAllReservationsFromStore(storeId);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
