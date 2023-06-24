@@ -127,13 +127,19 @@ namespace DecorStudio_api.Services
 
 
         //svi dekori iz kataloga
-        public async Task<List<Decor>> GetAllDecorsFromCatalog(int catalogId)
+        public async Task<List<Decor>> GetAllDecorsFromCatalog(int catalogId, string? filter)
         {
             var list = await context.Catalog_Decors
                 .Where(c => c.CatalogId == catalogId)
                 .Include(c => c.Decor)
                 .Select(c => c.Decor)
                 .ToListAsync();
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                list = list.Where(d => d.Type.Contains(filter, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             return list;
         }
 

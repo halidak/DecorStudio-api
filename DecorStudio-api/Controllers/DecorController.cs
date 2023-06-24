@@ -44,11 +44,11 @@ namespace DecorStudio_api.Controllers
 
         //sav dekor iz kataloga
         [HttpGet("decore-catalog/{catalogId}")]
-        public async Task<IActionResult> GetByCatalogId(int catalogId)
+        public async Task<IActionResult> GetByCatalogId(int catalogId, string? filter)
         {
             try
             {
-                var list = await decorService.GetAllDecorsFromCatalog(catalogId);
+                var list = await decorService.GetAllDecorsFromCatalog(catalogId, filter);
                 return Ok(list);
             }
             catch (Exception ex)
