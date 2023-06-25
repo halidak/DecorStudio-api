@@ -248,8 +248,8 @@ namespace DecorStudio_api.Services
             var htmlContent = $"<h1>Welcome to Decor Studio</h1>" +
                     $"<h3>Please click " +
                  $"<a href=\"{configuration.GetSection("ClientAppUrl").Value}/new-password/{user.UserName}/{encodedToken}\">here</a>" +
-                 $" to confirm your account</h3>";
-            SendEmail(user, "Verify your account", htmlContent).Wait();
+                 $" reset your password</h3>";
+            SendEmail(user, "Reset your password", htmlContent).Wait();
 
             // Send the resetLink to the user's email address using an email service
 

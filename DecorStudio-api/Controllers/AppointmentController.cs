@@ -100,11 +100,11 @@ namespace DecorStudio_api.Controllers
         }
 
         [HttpGet("get-all-distinct")]
-        public async Task<IActionResult> GetAppointmentsByStoreAndDate()
+        public async Task<IActionResult> GetAppointmentsByStoreAndDate(int number)
         {
             try
             {
-                var list = await service.GetAppointmentsByStoreAndDate();
+                var list = await service.GetAppointmentsByStoreAndDate(number);
                 return Ok(list);
             }
             catch (Exception ex)

@@ -37,16 +37,31 @@ namespace DecorStudio_api.Services
         }
 
         //svi slobodni termini osoblja koji su veci od danasnjeg datuma
-        public async Task<List<Appointment>> GetAppointmentsByStoreAndDate()
+        public async Task<List<Appointment>> GetAppointmentsByStoreAndDate(int number)
         {
-            return await context.Appointments
-             .Where(a => a.ReservationId == null && a.DateTime.Date >= DateTime.Now.Date)
-             .GroupBy(a => new { a.DateTime.Year, a.DateTime.Month, a.DateTime.Day }) // Grupisanje po danu, godini i mesecu
-             .Select(g => g.First()) // Izbor prvog elementa iz svake grupe
-             .ToListAsync();
+            List<Appointment> appointments;
 
+            if (number < 3)
+            {
+                appointments = await context.Appointments
+                    .Where(a => a.ReservationId == null && a.DateTime.Date >= DateTime.Now.Date)
+                    .GroupBy(a => new { a.DateTime.Year, a.DateTime.Month, a.DateTime.Day }) // Grupisanje po danu, godini i mesecu
+                    .Select(g => g.First()) // Izbor prvog elementa iz svake grupe
+                    .ToListAsync();
+            }
+            else
+            {
+                 appointments = await context.Appointments
+                  .Where(a => a.ReservationId == null && a.DateTime.Date >= DateTime.Now.Date)
+                  .GroupBy(a => a.DateTime)
+                  .Where(g => g.Select(a => a.UserId).Distinct().Count() > 1)
+                  .Select(g => g.First())
+                  .ToListAsync();
+            }
 
+            return appointments;
         }
+
 
         public async Task<Appointment> GetAppointment(int id)
         {
