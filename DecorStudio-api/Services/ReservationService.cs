@@ -126,6 +126,7 @@ namespace DecorStudio_api.Services
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Decor_Reservations)
                 .ThenInclude(dr => dr.Decor)
+                .Include(a => a.Appointments)
                 .ToListAsync();
             return reservations;
         }
