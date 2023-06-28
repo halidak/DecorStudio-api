@@ -163,6 +163,19 @@ namespace DecorStudio_api.Controllers
             }
         }
 
+        [HttpGet("all-employees/{id}")]
+        public async Task<IActionResult> GetAllEmployees(int id)
+        {
+            try
+            {
+                var res = await userService.GetEmployees(id);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
 

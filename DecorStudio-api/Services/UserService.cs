@@ -274,6 +274,13 @@ namespace DecorStudio_api.Services
             }
         }
 
+        //get all employees from store
+        public async Task<List<User>> GetEmployees(int storeId)
+        {
+           var list = context.Users.Where(x => x.StoreId == storeId && x.RoleId == 2).ToList();
+            return list;
+        }
+
 
         public async Task SendEmail(User u, string subject, string htmlContent)
         {
