@@ -190,15 +190,17 @@ namespace DecorStudio_api.Services
         public async Task<List<Catalog_Decor>> GetAllReservationsFromStore(int storeId)
         {
             var catalogDecors = await context.Catalog_Decors
-         .Where(cd => cd.Catalog.StoreId == storeId)
-         .Include(cd => cd.Decor)
-             .ThenInclude(d => d.Decor_Reservations)
-                 .ThenInclude(dr => dr.Reservation)
-                     .ThenInclude(r => r.Appointments)
-         .ToListAsync();
+                .Where(cd => cd.Catalog.StoreId == storeId)
+                .Include(cd => cd.Decor)
+                    .ThenInclude(d => d.Decor_Reservations)
+                        .ThenInclude(dr => dr.Reservation)
+                            .ThenInclude(r => r.Appointments)
+                .Where(cd => cd.Decor.Decor_Reservations.Any()) // Dodajte ovaj filter da biste uključili samo dekore sa rezervacijama
+                .ToListAsync();
 
             return catalogDecors;
         }
+
 
 
 

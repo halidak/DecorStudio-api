@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
+using System.Net;
 
 namespace DecorStudio_api.Services
 {
@@ -243,7 +244,7 @@ namespace DecorStudio_api.Services
             }
 
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken = HttpUtility.UrlEncode(token); // Enkodiraj token
+            var encodedToken = WebUtility.UrlEncode(token); // Enkodiraj token
 
             var htmlContent = $"<h1>Welcome to Decor Studio</h1>" +
                     $"<h3>Please click " +
@@ -284,14 +285,9 @@ namespace DecorStudio_api.Services
 
         public async Task SendEmail(User u, string subject, string htmlContent)
         {
-            //var apiKey = Environment.GetEnvironmentVariable("EmailKey");
-            var apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("halida.karisik6@gmail.com", "DecorStudio");
-            var to = new EmailAddress(u.Email, "DecorStudio User");
-            var plainTextContent = "";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
+          
+
+
         }
 
     }
